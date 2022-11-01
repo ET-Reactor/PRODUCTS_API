@@ -1,7 +1,7 @@
 {
-  "name": "qa_api",
+  "name": "products_api",
   "version": "1.0.0",
-  "description": "Questions and Answers API for e-commerce web application",
+  "description": "Products API for e-commerce web application",
   "main": "index.js",
   "scripts": {
     "server-dev": "npx nodemon --watch server server/index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ET-Reactor/QA_API.git"
+    "url": "git+https://github.com/ET-Reactor/PRODUCTS_API.git"
   },
-  "author": "Josh Garza",
+  "author": "Curtis Wang",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ET-Reactor/QA_API/issues"
+    "url": "https://github.com/ET-Reactor/PRODUCTS_API/issues"
   },
-  "homepage": "https://github.com/ET-Reactor/QA_API#readme",
+  "homepage": "https://github.com/ET-Reactor/PRODUCTS_API#readme",
   "dependencies": {
     "express": "^4.18.2"
   }
