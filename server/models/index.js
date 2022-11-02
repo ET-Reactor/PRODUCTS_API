@@ -1,3 +1,16 @@
 const db = require('../db/db.js');
 
-module.exports = {};
+module.exports = {
+  getRelated: () => {
+
+  },
+  getProduct: () => {
+
+  },
+  getProducts: () => {
+
+  },
+  getStyles: () => {
+
+  }
+};

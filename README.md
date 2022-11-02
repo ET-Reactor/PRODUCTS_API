@@ -1,2 +1,2 @@
-# QA_API
-Questions and answers api for e-commerce application
+# Products_API
+Products api for e-commerce application
