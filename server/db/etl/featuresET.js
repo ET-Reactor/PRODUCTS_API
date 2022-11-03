@@ -7,20 +7,16 @@ const csvStringifier = createCsvStringifier({
   header: [{
     id: 'id', title: 'id'
   }, {
-    id: 'name', title: 'name'
+    id: 'product_id', title: 'product_id'
   }, {
-    id: 'slogan', title: 'slogan'
+    id: 'feature', title: 'feature'
   }, {
-    id: 'description', title: 'description'
-  }, {
-    id: 'category', title: 'category'
-  }, {
-    id: 'default_price', title: 'default_price'
+    id: 'value', title: 'value'
   }]
 });
 
-let readStream = fs.createReadStream('./data/products.csv');
-let writeStream = fs.createWriteStream('./data/cleanproducts.csv');
+let readStream = fs.createReadStream('../../../data/features.csv');
+let writeStream = fs.createWriteStream('../../../data/cleanfeatures.csv');
 
 class CSVCleaner extends Transform {
   constructor(options) {
@@ -41,6 +37,12 @@ _transform(chunk, encoding, next) {
   // filters out all non-number characters
   let onlyNumbers = chunk.default_price.replace(/\D/g, '');
   chunk.default_price = onlyNumbers;
+
+  // check email format
+
+  // check date format
+
+  // if data doesnt end properly clear finish
 
   // use our csvStringifier to turn our chunk into a csv string
   chunk = csvStringifier.stringifyRecords([chunk]);
