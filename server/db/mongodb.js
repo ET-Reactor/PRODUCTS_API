@@ -1,11 +1,11 @@
 require('dotenv').config();
-const mongoose, { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 
 mongoose.connect(`mongodb://localhost/${process.env.PGDATABASE}`);
 
-const featuresSchema = new Schema({ feature: String, value: String });
-const relatedSchema = new Schema({ related_product_id: Number });
-const productSchema = new Schema({
+const featuresSchema = new mongoose.Schema({ feature: String, value: String });
+const relatedSchema = new mongoose.Schema({ related_product_id: Number });
+const productSchema = new mongoose.Schema({
   id: { type: Number, unique: true, required: true },
   name: String,
   slogan: String,
@@ -15,9 +15,9 @@ const productSchema = new Schema({
   features: [featuresSchema],
   related_products: [relatedSchema]
 });
-const skusSchema = new Schema({ size: String, quantity: Number });
-const photosSchema = new Schema({ url: String, thumbnail_url: String });
-const styleSchema = new Schema({
+const skusSchema = new mongoose.Schema({ size: String, quantity: Number });
+const photosSchema = new mongoose.Schema({ url: String, thumbnail_url: String });
+const styleSchema = new mongoose.Schema({
   id: { type: Number, unique: true, required: true },
   productId: Number,
   name: String,
