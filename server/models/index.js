@@ -1,4 +1,5 @@
 const { pool } = require('../db/db.js');
+// const db = require('../db/mongodb.js');
 
 module.exports = {
   getRelated: async () => {
