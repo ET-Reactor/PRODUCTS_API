@@ -2,10 +2,10 @@ const models = require('../models');
 
 const products = {
   getRelated: (req, res) => {
-    let productID = req.query.id;
+    let productID = req.params.id;
     models.getRelated(productID, (err, related) => {
       if (err) {
-        res.status(404).end();
+        res.status(404).json(err);
       }
       res.status(200).json(related)
     })
@@ -20,13 +20,18 @@ const products = {
     })
   },
   getAll: (req, res) => {
-    res.status(200).send('get all products')
+    models.getProducts((err, products) => {
+      if (err) {
+        res.status(404).json(err);
+      }
+      res.status(200).json(products)
+    })
   },
   getStyles: (req, res) => {
-    let productID = req.query.id;
+    let productID = req.params.id;
     models.getStyles(productID, (err, styles) => {
       if (err) {
-        res.status(404).end();
+        res.status(404).json(err);
       }
       res.status(200).json(styles)
     })
