@@ -37,10 +37,22 @@ module.exports = {
   },
   getStyles: async (productID, callback) => {
     try {
-      const res = await pool.query("SELECT * FROM styles WHERE productId=$1", [productID]);
-      console.log(res.rows);
+      let skusArr = [];
+      const stylesResult = await pool.query("SELECT * FROM styles WHERE productId=$1", [productID]);
+      stylesResult.rows.forEach(row => {
+        let styleID = row.id;
+        const photosResult = pool.query("SELECT url, thumbnail_url FROM photos WHERE styleID=$1", [styleID])
+          .then((response) => {
+            row.photos = (response.rows);
+            console.log('should have photos added', row);
+          })
+          .catch((err) => console.log('Error selecting photos'));
+      });
+      callback(null, stylesResult.rows);
     } catch (error) {
-      console.log('getStyles', error);
+      callback(error, null);
     }
   }
 };
+
+// const stylesResult = await pool.query("SELECT styles.*, photos.url, photos.thumbnail_url FROM styles INNER JOIN photos ON photos.styleID=styles.id WHERE productId=$1", [productID]);
