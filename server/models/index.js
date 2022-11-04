@@ -22,10 +22,15 @@ module.exports = {
       callback(error, null);
     }
   },
-  getProducts: async (callback) => {
+  getProducts: async (resultsCount, callback) => {
     try {
-      const productsResult = await pool.query("SELECT * FROM product LIMIT 5");
-      callback(null, productsResult.rows);
+      if (resultsCount === undefined) {
+        const productsResult = await pool.query("SELECT * FROM product LIMIT 5");
+        callback(null, productsResult.rows);
+      } else {
+        const productsResult = await pool.query("SELECT * FROM product LIMIT $1", [resultsCount]);
+        callback(null, productsResult.rows);
+      }
     } catch (error) {
       callback(error, null);
     }
