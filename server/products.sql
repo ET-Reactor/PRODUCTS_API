@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS styles(
   id SERIAL PRIMARY KEY,
   productId INT REFERENCES product (id),
   name VARCHAR(155) NOT NULL,
-  sale_price INTEGER,
+  sale_price INT,
   original_price INT,
   default_style BOOLEAN NOT NULL
 );
@@ -44,18 +44,30 @@ CREATE TABLE IF NOT EXISTS photos(
   id SERIAL PRIMARY KEY,
   styleID INT REFERENCES styles (id),
   url VARCHAR(255) NOT NULL,
-  thumbnail_url VARCHAR(255) NOT NULL
+  thumbnail_url TEXT NOT NULL
 );
 
 -- ETL
--- COPY product(id, name, slogan, description, category, default_price)
---   FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/product.csv'
---   DELIMITER ',' CSV HEADER;
+COPY product(id, name, slogan, description, category, default_price)
+  FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/product.csv'
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
 
 COPY related(id, current_product_id, related_product_id)
   FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/related.csv'
-  DELIMITER ',' CSV HEADER;
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
 
 COPY features(id, product_id, feature, value)
   FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/features.csv'
-  DELIMITER ',' CSV HEADER;
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
+
+COPY styles(id, productId, name, sale_price, original_price, default_style)
+  FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/styles.csv'
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
+
+COPY skus(id, styleID, size, quantity)
+  FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/skus.csv'
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
+
+COPY photos(id, styleID, url, thumbnail_url)
+  FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/photos.csv'
+  DELIMITER ',' NULL AS 'null' CSV HEADER;
