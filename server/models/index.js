@@ -7,15 +7,18 @@ module.exports = {
       const res = await pool.query("SELECT * FROM related WHERE current_product_id=?", [productID]);
       console.log(res.rows);
     } catch (error) {
-      console.log('getRelated error', error);
+      console.log('getRelated', error);
     }
   },
   getProduct: async (productID, callback) => {
+    console.log('getting product, id:', productID);
     try {
-      const res = await pool.query("SELECT * FROM product WHERE id=?", [productID]);
-      console.log(res.rows);
+      const productResult = await pool.query("SELECT * FROM product WHERE id=$1", [productID]);
+      const featuresResult = await pool.query("SELECT feature, value FROM features WHERE product_id=$1", [productID]);
+      productResult.rows[0].features = featuresResult.rows;
+      callback(null, productResult.rows);
     } catch (error) {
-      console.log('getProduct error', error);
+      callback(error, null);
     }
   },
   getProducts: () => {
@@ -26,7 +29,7 @@ module.exports = {
       const res = await pool.query("SELECT * FROM styles WHERE productId=?", [productID]);
       console.log(res.rows);
     } catch (error) {
-      console.log('getStyles error', error);
+      console.log('getStyles', error);
     }
   }
 };

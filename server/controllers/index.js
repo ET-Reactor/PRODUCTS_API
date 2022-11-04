@@ -11,10 +11,10 @@ const products = {
     })
   },
   getOne: (req, res) => {
-    let productID = req.query.id;
+    let productID = req.params.id;
     models.getProduct(productID, (err, product) => {
       if (err) {
-        res.status(404).end();
+        res.status(404).json(err);
       }
       res.status(200).json(product)
     })
