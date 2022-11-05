@@ -37,7 +37,7 @@ module.exports = {
   },
   getStyles: async (productID, callback) => {
     try {
-      const stylesResult = await pool.query("SELECT styles.*, jsonb_agg(to_jsonb(photos) - 'id' - 'styleid') AS photos FROM styles LEFT JOIN photos ON photos.styleID=styles.id WHERE productId=$1 GROUP BY styles.id", [productID])
+      const stylesResult = await pool.query("SELECT styles.*, jsonb_agg(to_jsonb(photos) - 'id' - 'styleid') AS photos FROM styles LEFT JOIN photos ON photos.styleid=styles.id WHERE productId=$1 GROUP BY styles.id", [productID])
       console.log(stylesResult.rows);
       // stylesResult.rows.forEach((row, i) => {
       //   delete row.productid;
