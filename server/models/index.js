@@ -37,14 +37,16 @@ module.exports = {
       callback(error, null);
     }
   },
-  getProducts: async (resultsCount, callback) => {
+  getProducts: async (productsPage, productsCount, callback) => {
     try {
       const productsResult = await pool.query(`
         SELECT
           *
         FROM product
-        LIMIT 5
-      `);
+        ORDER BY
+          product.id
+        LIMIT $1 OFFSET (($2 - 1) * $1)
+      `, [productsCount, productsPage]);
       callback(null, productsResult.rows);
     } catch (error) {
       callback(error, null);
