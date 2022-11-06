@@ -18,8 +18,10 @@ export const options = {
 
 export default function () {
   const responses = http.batch([
-    'http://localhost:3000/api/products',
-    'http://localhost:3000/api/products/1',
+    ['GET', 'http://localhost:3000/api/products'],
+    ['GET', 'http://localhost:3000/api/products/1'],
+    ['GET', 'http://localhost:3000/api/products/1/styles'],
+    ['GET', 'http://localhost:3000/api/products/1/related'],
   ]);
 
   group('Products API uptime check', () => {
@@ -32,6 +34,22 @@ export default function () {
 
   group('Product API uptime check', () => {
     check(responses[1], {
+      'status is 200': (res) => res.status === 200,
+      'get response body is defined': (res) => res.body !== undefined,
+    }) || errorRate.add(1);
+    sleep(1);
+  });
+
+  group('Styles API uptime check', () => {
+    check(responses[2], {
+      'status is 200': (res) => res.status === 200,
+      'get response body is defined': (res) => res.body !== undefined,
+    }) || errorRate.add(1);
+    sleep(1);
+  });
+
+  group('Related API uptime check', () => {
+    check(responses[3], {
       'status is 200': (res) => res.status === 200,
       'get response body is defined': (res) => res.body !== undefined,
     }) || errorRate.add(1);
