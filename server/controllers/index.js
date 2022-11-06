@@ -20,10 +20,19 @@ const products = {
     })
   },
   getAll: (req, res) => {
+    let productsCount;
+    let productsPage;
     if (req.query.count) {
-      let resultsCount = req.query.count;
+      productsCount = req.query.count;
+    } else {
+      productsCount = 5;
     }
-    models.getProducts(resultsCount, (err, products) => {
+    if (req.query.page) {
+      productsPage = req.query.page;
+    } else {
+      productsPage = 1;
+    }
+    models.getProducts(productsPage, productsCount, (err, products) => {
       if (err) {
         res.status(404).json(err);
       }
