@@ -26,6 +26,7 @@ module.exports = {
         LEFT JOIN features ON features.product_id=product.id
         GROUP BY product.id, features.product_id
         HAVING product_id=$1
+        ORDER BY product.id
       `, [productID]);
       callback(null, productResult.rows);
     } catch (error) {
@@ -63,7 +64,8 @@ module.exports = {
         LEFT JOIN photos ON photos.styleid=styles.id
         LEFT JOIN skus ON skus.styleid=styles.id
         GROUP BY styles.id
-        HAVING productId=$1`
+        HAVING productId=$1
+        ORDER BY styles.id`
         , [productID])
       callback(null, stylesResult.rows);
     } catch (error) {
