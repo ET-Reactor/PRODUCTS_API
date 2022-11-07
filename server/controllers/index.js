@@ -42,6 +42,7 @@ const products = {
   getStyles: (req, res) => {
     let productID = req.params.id;
     models.getStyles(productID, (err, styles) => {
+      // console.log(err, styles);
       if (err) {
         res.status(404).json(err);
       }

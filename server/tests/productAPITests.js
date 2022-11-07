@@ -17,11 +17,12 @@ export const options = {
 };
 
 export default function () {
+  const last10PID = randomIntBetween(900012, 1000012);
   const responses = http.batch([
-    ['GET', 'http://localhost:3000/api/products'],
-    ['GET', 'http://localhost:3000/api/products/1'],
-    ['GET', 'http://localhost:3000/api/products/1/styles'],
-    ['GET', 'http://localhost:3000/api/products/1/related'],
+    ['GET', `http://localhost:3000/api/products`],
+    ['GET', `http://localhost:3000/api/products/1`],
+    ['GET', `http://localhost:3000/api/products/1/styles`],
+    ['GET', `http://localhost:3000/api/products/1/related`],
   ]);
 
   group('Products API uptime check', () => {
