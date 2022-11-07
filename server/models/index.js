@@ -26,6 +26,7 @@ module.exports = {
         LEFT JOIN features ON features.product_id=product.id
         GROUP BY product.id, features.product_id
         HAVING product_id=$1
+        ORDER BY product.id
       `, [productID]);
       callback(null, productResult.rows);
     } catch (error) {
@@ -55,7 +56,7 @@ module.exports = {
           styles.id AS style_id,
           styles.name,
           styles.original_price,
-          styles.sale_price,
+          COALESCE(styles.sale_price, 0) AS sale_price,
           styles.default_style AS "default?",
           jsonb_agg(distinct jsonb_build_object('url', photos.url, 'thumbnail_url', photos.thumbnail_url)) AS photos,
           jsonb_object_agg(COALESCE(CAST(skus.id AS VARCHAR), 'null'), jsonb_build_object('quantity', skus.quantity, 'size', skus.size)) AS skus
@@ -63,7 +64,8 @@ module.exports = {
         LEFT JOIN photos ON photos.styleid=styles.id
         LEFT JOIN skus ON skus.styleid=styles.id
         GROUP BY styles.id
-        HAVING productId=$1`
+        HAVING productId=$1
+        ORDER BY styles.id`
         , [productID])
       callback(null, stylesResult.rows);
     } catch (error) {
@@ -71,3 +73,11 @@ module.exports = {
     }
   }
 };
+
+/*
+        (SELECT jsonb_agg(jsonb_build_object('url', photos.url, 'thumbnail_url', photos.thumbnail_url))
+          FROM photos WHERE photos.styleid=$1) AS photos,
+          (SELECT json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.size))
+          FROM skus WHERE skus.styleid=$1) AS skus
+        FROM styles WHERE styles.productId=$1 ORDER BY styles.id
+*/
