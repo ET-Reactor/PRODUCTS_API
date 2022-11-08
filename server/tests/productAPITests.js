@@ -5,25 +5,19 @@ import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
-// export const productsError = new Rate('/GET products errors');
+export const productsError = new Rate('/GET products errors');
 export const productsTrend = new Trend('/GET products API uptime');
-// export const productError = new Rate('/GET product errors');
+export const productError = new Rate('/GET product errors');
 export const productTrend = new Trend('/GET product API uptime');
-// export const stylesError = new Rate('/GET styles errors');
+export const stylesError = new Rate('/GET styles errors');
 export const stylesTrend = new Trend('/GET styles API uptime');
-// export const relatedError = new Rate('/GET related errors');
+export const relatedError = new Rate('/GET related errors');
 export const relatedTrend = new Trend('/GET related API uptime');
 
 export const last10PID = randomIntBetween(900012, 1000012);
 
 export const options = {
   discardResponseBodies: true,
-  // stages: [
-  //   { duration: '0.5m', target: 10 },
-  //   { duration: '0.5m', target: 10 },
-  //   { duration: '0.5m', target: 0 },
-  // ],
-  rps: 10,
   scenarios: {
     products: {
       executor: 'constant-arrival-rate',
@@ -68,7 +62,7 @@ export const options = {
   },
   thresholds: {
     http_req_failed: ['rate<0.01'],
-    http_req_duration: ['p(90)<2000'],
+    http_req_duration: ['p(95)<2000'],
   },
 };
 
@@ -78,7 +72,7 @@ export function products() {
   check(productsResponse, {
     'Products reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && res.body.length > 0,
-  });
+  }) || productsError.add(1);
   // sleep(0.5);
 }
 
@@ -89,7 +83,7 @@ export function product() {
   check(productResponse, {
     'Product reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
-  });
+  }) || productError.add(1);
   // sleep(0.5);
 }
 
@@ -100,7 +94,7 @@ export function styles() {
   check(stylesResponse, {
     'Styles reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
-  });
+  }) || stylesError.add(1);
   // sleep(0.5);
 }
 
@@ -111,7 +105,7 @@ export function related() {
   check(relatedResponse, {
     'Related reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
-  });
+  }) || relatedError.add(1);
   // sleep(0.5);
 }
 
