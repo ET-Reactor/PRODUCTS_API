@@ -7,6 +7,9 @@ const app = express();
 app.use(express.json());
 
 app.use('/api', router)
+app.get('/loaderio-8b0e638a0ddbf6f2967d9d36b7374ab3/', (req, res) => {
+  res.send('loaderio-8b0e638a0ddbf6f2967d9d36b7374ab3');
+})
 
 const PORT = 3000;
 
