@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS photos(
   thumbnail_url TEXT NOT NULL
 );
 
+-- CREATE UNIQUE INDEX styles_idx ON styles (id);
+
 -- ETL
 COPY product(id, name, slogan, description, category, default_price)
   FROM '/Users/curtiswang/projects/Hack Reactor/Immersive/SDC/PRODUCTS_API/data/product.csv'
