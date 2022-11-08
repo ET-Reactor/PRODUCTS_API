@@ -22,35 +22,35 @@ export const options = {
     products: {
       executor: 'constant-vus',
       exec: 'products',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'productsURL' },
     },
     product: {
       executor: 'constant-vus',
       exec: 'product',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'productURL' },
     },
     styles: {
       executor: 'constant-vus',
       exec: 'styles',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'stylesURL' },
     },
     related: {
       executor: 'constant-vus',
       exec: 'related',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'relatedURL' },
     },
   },
   thresholds: {
     http_req_failed: ['rate<0.01'],
-    http_req_duration: ['p(90)<2000'],
+    http_req_duration: ['p(95)<2000'],
   },
 };
 
@@ -59,9 +59,8 @@ export function products() {
   productsTrend.add(productsResponse.timings.duration);
   check(productsResponse, {
     'Products reponse status is 200': (res) => res.status === 200,
-    // 'get response body is not empty': (res) => res.body && res.body.length > 0,
+    // 'get response body is not empty': (res) => res.body && res.body.length === 5,
   }) || productsError.add(1);
-  sleep(1);
 }
 
 export function product() {
@@ -90,7 +89,7 @@ export function related() {
   relatedTrend.add(relatedResponse.timings.duration);
   check(relatedResponse, {
     'Related reponse status is 200': (res) => res.status === 200,
-    // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
+    // 'get response body is not empty': (res) => res.body && res.body.length > 0,
   }) || relatedError.add(1);
 }
 
