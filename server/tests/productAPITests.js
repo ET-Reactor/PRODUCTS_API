@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check, sleep, group } from 'k6';
+import { check, sleep } from 'k6';
 import { Rate, Trend } from 'k6/metrics';
 import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
@@ -20,49 +20,37 @@ export const options = {
   discardResponseBodies: true,
   scenarios: {
     products: {
-      executor: 'constant-arrival-rate',
+      executor: 'constant-vus',
       exec: 'products',
+      vus: 3,
       duration: '2m',
-      rate: 50,
-      timeUnit: '1s',
-      preAllocatedVUs: 2,
-      maxVUs: 3,
       tags: { name: 'productsURL' },
     },
     product: {
-      executor: 'constant-arrival-rate',
+      executor: 'constant-vus',
       exec: 'product',
+      vus: 3,
       duration: '2m',
-      rate: 50,
-      timeUnit: '1s',
-      preAllocatedVUs: 2,
-      maxVUs: 3,
       tags: { name: 'productURL' },
     },
     styles: {
-      executor: 'constant-arrival-rate',
+      executor: 'constant-vus',
       exec: 'styles',
+      vus: 3,
       duration: '2m',
-      rate: 50,
-      timeUnit: '1s',
-      preAllocatedVUs: 2,
-      maxVUs: 3,
       tags: { name: 'stylesURL' },
     },
     related: {
-      executor: 'constant-arrival-rate',
+      executor: 'constant-vus',
       exec: 'related',
+      vus: 3,
       duration: '2m',
-      rate: 50,
-      timeUnit: '1s',
-      preAllocatedVUs: 2,
-      maxVUs: 3,
       tags: { name: 'relatedURL' },
     },
   },
   thresholds: {
     http_req_failed: ['rate<0.01'],
-    http_req_duration: ['p(95)<2000'],
+    http_req_duration: ['p(90)<2000'],
   },
 };
 
@@ -73,7 +61,7 @@ export function products() {
     'Products reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && res.body.length > 0,
   }) || productsError.add(1);
-  // sleep(0.5);
+  sleep(1);
 }
 
 export function product() {
@@ -84,7 +72,6 @@ export function product() {
     'Product reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
   }) || productError.add(1);
-  // sleep(0.5);
 }
 
 export function styles() {
@@ -95,7 +82,6 @@ export function styles() {
     'Styles reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
   }) || stylesError.add(1);
-  // sleep(0.5);
 }
 
 export function related() {
@@ -106,7 +92,6 @@ export function related() {
     'Related reponse status is 200': (res) => res.status === 200,
     // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
   }) || relatedError.add(1);
-  // sleep(0.5);
 }
 
 export function handleSummary(data) {
@@ -166,4 +151,47 @@ export default function () {
   //   }) || relatedError.add(1);
   //   sleep(1);
   // });
+
+
+
+    products: {
+      executor: 'constant-arrival-rate',
+      exec: 'products',
+      duration: '1m',
+      rate: 50,
+      timeUnit: '1s',
+      preAllocatedVUs: 2,
+      maxVUs: 3,
+      tags: { name: 'productsURL' },
+    },
+    product: {
+      executor: 'constant-arrival-rate',
+      exec: 'product',
+      duration: '1m',
+      rate: 50,
+      timeUnit: '1s',
+      preAllocatedVUs: 2,
+      maxVUs: 3,
+      tags: { name: 'productURL' },
+    },
+    styles: {
+      executor: 'constant-arrival-rate',
+      exec: 'styles',
+      duration: '1m',
+      rate: 50,
+      timeUnit: '1s',
+      preAllocatedVUs: 2,
+      maxVUs: 3,
+      tags: { name: 'stylesURL' },
+    },
+    related: {
+      executor: 'constant-arrival-rate',
+      exec: 'related',
+      duration: '1m',
+      rate: 50,
+      timeUnit: '1s',
+      preAllocatedVUs: 2,
+      maxVUs: 3,
+      tags: { name: 'relatedURL' },
+    },
 */
