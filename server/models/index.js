@@ -3,8 +3,9 @@ const { pool } = require('../db/db.js');
 
 module.exports = {
   getRelated: async (productID, callback) => {
+    const client = await pool.connect();
     try {
-      const relatedResult = await pool.query(`
+      const relatedResult = await client.query(`
         SELECT
           jsonb_agg(related_product_id) AS rps
         FROM related
@@ -13,12 +14,15 @@ module.exports = {
       callback(null, relatedResult.rows[0].rps);
     } catch (error) {
       callback(error, null);
+    } finally {
+      client.release();
     }
   },
 
   getProduct: async (productID, callback) => {
+    const client = await pool.connect();
     try {
-      const productResult = await pool.query(`
+      const productResult = await client.query(`
         SELECT
           product.*,
           json_agg(json_build_object('feature', features.feature, 'value', features.value)) AS features
@@ -31,12 +35,15 @@ module.exports = {
       callback(null, productResult.rows);
     } catch (error) {
       callback(error, null);
+    } finally {
+      client.release();
     }
   },
 
   getProducts: async (productsPage, productsCount, callback) => {
+    const client = await pool.connect();
     try {
-      const productsResult = await pool.query(`
+      const productsResult = await client.query(`
         SELECT
           *
         FROM product
@@ -46,12 +53,15 @@ module.exports = {
       callback(null, productsResult.rows);
     } catch (error) {
       callback(error, null);
+    } finally {
+      client.release();
     }
   },
 
   getStyles: async (productID, callback) => {
+    const client = await pool.connect();
     try {
-      const stylesResult = await pool.query(
+      const stylesResult = await client.query(
         `SELECT
           styles.id AS style_id,
           styles.name,
@@ -70,6 +80,8 @@ module.exports = {
       callback(null, stylesResult.rows);
     } catch (error) {
       callback(error, null);
+    } finally {
+      client.release();
     }
   }
 };
