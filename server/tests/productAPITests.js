@@ -22,35 +22,35 @@ export const options = {
     products: {
       executor: 'constant-vus',
       exec: 'products',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'productsURL' },
     },
     product: {
       executor: 'constant-vus',
       exec: 'product',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'productURL' },
     },
     styles: {
       executor: 'constant-vus',
       exec: 'styles',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'stylesURL' },
     },
     related: {
       executor: 'constant-vus',
       exec: 'related',
-      vus: 3,
-      duration: '2m',
+      vus: 4,
+      duration: '1m',
       tags: { name: 'relatedURL' },
     },
   },
   thresholds: {
     http_req_failed: ['rate<0.01'],
-    http_req_duration: ['p(90)<2000'],
+    http_req_duration: ['p(95)<2000'],
   },
 };
 
@@ -59,9 +59,8 @@ export function products() {
   productsTrend.add(productsResponse.timings.duration);
   check(productsResponse, {
     'Products reponse status is 200': (res) => res.status === 200,
-    // 'get response body is not empty': (res) => res.body && res.body.length > 0,
+    // 'get response body is not empty': (res) => res.body && res.body.length === 5,
   }) || productsError.add(1);
-  sleep(1);
 }
 
 export function product() {
@@ -90,7 +89,7 @@ export function related() {
   relatedTrend.add(relatedResponse.timings.duration);
   check(relatedResponse, {
     'Related reponse status is 200': (res) => res.status === 200,
-    // 'get response body is not empty': (res) => res.body && Object.keys(res.body).length > 0,
+    // 'get response body is not empty': (res) => res.body && res.body.length > 0,
   }) || relatedError.add(1);
 }
 
@@ -104,56 +103,6 @@ export function handleSummary(data) {
 export default function () {
 }
 /*
-  // const last10PID = randomIntBetween(900012, 1000012);
-  // const responses = http.batch([
-  //   // ['GET', `http://localhost:3000/api/products`, null, { tags: { name: 'productsURL' } }],
-  //   ['GET', `http://localhost:3000/api/products/${last10PID}`, null, { tags: { name: 'productURL' } }],
-  //   ['GET', `http://localhost:3000/api/products/${last10PID}/styles`, null, { tags: { name: 'stylesURL' } }],
-  //   ['GET', `http://localhost:3000/api/products/${last10PID}/related`, null, { tags: { name: 'relatedURL' } }],
-  // ]);
-
-  // group('Products API uptime check', () => {
-  //   const productsResponse = responses[0];
-  //   productsTrend.add(productsResponse.timings.duration);
-  //   check(productsResponse, {
-  //     'status is 200': (res) => res.status === 200,
-  //     // 'get response body is not empty': (res) => Object.keys(res.body).length > 0,
-  //   }) || productsError.add(1);
-  //   sleep(1);
-  // });
-
-  // group('Product API uptime check', () => {
-  //   const productResponse = responses[1];
-  //   productTrend.add(productResponse.timings.duration);
-  //   check(productResponse, {
-  //     'status is 200': (res) => res.status === 200,
-  //     // 'get response body is not empty': (res) => Object.keys(res.body).length > 0,
-  //   }) || productError.add(1);
-  //   sleep(1);
-  // });
-
-  // group('Styles API uptime check', () => {
-  //   const stylesResponse = responses[2];
-  //   stylesTrend.add(stylesResponse.timings.duration);
-  //   check(stylesResponse, {
-  //     'status is 200': (res) => res.status === 200,
-  //     // 'get response body is not empty': (res) => Object.keys(res.body).length > 0,
-  //   }) || stylesError.add(1);
-  //   sleep(1);
-  // });
-
-  // group('Related API uptime check', () => {
-  //   const relatedResponse = responses[3];
-  //   relatedTrend.add(relatedResponse.timings.duration);
-  //   check(relatedResponse, {
-  //     'status is 200': (res) => res.status === 200,
-  //     // 'get response body is not empty': (res) => Object.keys(res.body).length > 0,
-  //   }) || relatedError.add(1);
-  //   sleep(1);
-  // });
-
-
-
     products: {
       executor: 'constant-arrival-rate',
       exec: 'products',
