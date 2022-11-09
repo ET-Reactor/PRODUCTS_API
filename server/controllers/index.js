@@ -4,7 +4,7 @@ const products = {
   getRelated: (req, res) => {
     let productID = req.params.id;
     models.getRelated(productID, (err, related) => {
-      console.log(err, related);
+      // console.log(err, related);
       if (err) {
         res.status(404).json(err);
       }
@@ -14,7 +14,7 @@ const products = {
   getOne: (req, res) => {
     let productID = req.params.id;
     models.getProduct(productID, (err, product) => {
-      console.log(err, product);
+      // console.log(err, product);
       if (err) {
         res.status(404).json(err);
       }
@@ -35,7 +35,7 @@ const products = {
       productsPage = 1;
     }
     models.getProducts(productsPage, productsCount, (err, products) => {
-      console.log(err, products);
+      // console.log(err, products);
       if (err) {
         res.status(404).json(err);
       }
@@ -45,7 +45,7 @@ const products = {
   getStyles: (req, res) => {
     let productID = req.params.id;
     models.getStyles(productID, (err, styles) => {
-      console.log(err, styles);
+      // console.log(err, styles);
       if (err) {
         res.status(404).json(err);
       }
