@@ -14,5 +14,5 @@ app.get('/loaderio-8b0e638a0ddbf6f2967d9d36b7374ab3/', (req, res) => {
 const PORT = 3000;
 
 app.listen(PORT);
-console.log(`server listening at http://localhost:${PORT}`)
+console.log(`server listening at PORT: ${PORT}`)
 
