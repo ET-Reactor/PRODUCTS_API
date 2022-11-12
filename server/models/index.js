@@ -30,7 +30,6 @@ module.exports = {
         LEFT JOIN features ON features.product_id=product.id
         GROUP BY product.id, features.product_id
         HAVING product_id=$1
-        ORDER BY product.id
       `, [productID]);
       callback(null, productResult.rows);
     } catch (error) {
@@ -74,10 +73,12 @@ module.exports = {
         LEFT JOIN photos ON photos.styleid=styles.id
         LEFT JOIN skus ON skus.styleid=styles.id
         GROUP BY styles.id
-        HAVING productId=$1
-        ORDER BY styles.id`
+        HAVING productId=$1`
         , [productID])
-      callback(null, stylesResult.rows);
+      callback(null, {
+        product_id: productID,
+        results: stylesResult.rows
+      });
     } catch (error) {
       callback(error, null);
     } finally {
@@ -85,11 +86,3 @@ module.exports = {
     }
   }
 };
-
-/*
-        (SELECT jsonb_agg(jsonb_build_object('url', photos.url, 'thumbnail_url', photos.thumbnail_url))
-          FROM photos WHERE photos.styleid=$1) AS photos,
-          (SELECT json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.size))
-          FROM skus WHERE skus.styleid=$1) AS skus
-        FROM styles WHERE styles.productId=$1 ORDER BY styles.id
-*/
